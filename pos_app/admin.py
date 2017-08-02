@@ -1,6 +1,11 @@
 from django.contrib import admin
-from pos_app.models import Items
+from pos_app.models import Items, Receipt
 
-admin.site.register(Items)
+models = [
+    Items,
+    Receipt
+]
+
+admin.site.register(models)
 
 
