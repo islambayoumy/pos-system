@@ -1,30 +1,26 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from pos_app.models import Items
-from pos_app.serializers import ItemsSerializer
+from pos_app.models import Items, Receipt
+from pos_app.serializers import ReceiptsSerializer
 
-class ItemsList(APIView):
+class ReceiptList(APIView):
 
     def get(self, request):
         if request.user.is_authenticated():
-            items = Items.objects.all()
-            serializer = ItemsSerializer(items, many=True)
+            receipts = Receipt.objects.all()
+            serializer = ReceiptsSerializer(receipts, many=True)
             return Response(serializer.data)
         else:
             return Response('authentication needed !')
 
     def post(self, request):
         if request.user.is_authenticated():
-            code = request.POST.get('code', '')
-            name = request.POST.get('name', '')
-            price = request.POST.get('price', '')
-            stock_amount = request.POST.get('stock_amount', '')
-
             try:
-                item_obj = Items.objects.create(code=code, name=name, price=price, stock_amount=stock_amount)
-                item_obj.save()
-                return Response('add successfully', status=status.HTTP_201_CREATED)
+                receipt_obj = Receipt.objects.create()
+                receipt_obj.save()
+                response_str = 'add successfully | receipt_id = ' + str(receipt_obj.pk)
+                return Response(response_str, status=status.HTTP_201_CREATED)
             except:
                 return Response('error')
         else:
@@ -32,15 +28,15 @@ class ItemsList(APIView):
 
     def put(self, request):
         if request.user.is_authenticated():
-            code = request.POST.get('code', '')
-            stock_amount = request.POST.get('stock_amount', '')
-            item_obj = Items.objects.filter(code=code)
+            id = request.POST.get('receipt_id', '')
+            paid_amount = request.POST.get('paid_amount', '')
+            receipt_obj = Receipt.objects.filter(pk=id)
 
-            if not item_obj:
-                return Response('no such item')
+            if not receipt_obj:
+                return Response('no such receipt')
             else:
                 try:
-                    item_obj.update(stock_amount=stock_amount)
+                    receipt_obj.update(paid_amount=paid_amount)
                     return Response('updated successfully', status=status.HTTP_201_CREATED)
                 except:
                     return Response('error')
@@ -49,14 +45,14 @@ class ItemsList(APIView):
 
     def delete(self, request):
         if request.user.is_authenticated():
-            code = request.GET.get('code', '')
-            item_obj = Items.objects.filter(code=code)
+            id = request.GET.get('id', '')
+            receipt_obj = Receipt.objects.filter(pk=id)
 
-            if not item_obj:
-                return Response('no such item')
+            if not receipt_obj:
+                return Response('no such receipt')
             else:
                 try:
-                    item_obj.delete()
+                    receipt_obj.delete()
                     return Response('deleted successfully', status=status.HTTP_201_CREATED)
                 except:
                     return Response('error')
