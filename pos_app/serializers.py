@@ -6,6 +6,7 @@ class ItemsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Items
         fields = (
+            'id',
             'code',
             'name',
             'price',
@@ -22,5 +23,10 @@ class ReceiptsItemsSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Receipts_Items
-        fields = '__all__'
+        fields = (
+            'receipt',
+            'item',
+            'total_item_amount',
+            'paid_amount_per_item'
+        )
 
