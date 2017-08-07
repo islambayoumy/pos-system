@@ -1,4 +1,4 @@
-# Chat System
+# POS System
 Simple POS system API developed using python [Django](https://www.djangoproject.com) framework.
 
 
