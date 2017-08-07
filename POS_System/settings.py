@@ -21,8 +21,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_framework',
-    'pos_app'
+    'pos_app',
+    'finalware',
 ]
 
 MIDDLEWARE = [
@@ -107,3 +109,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# for development ONLY
+SITE_SUPERUSER_USERNAME = 'admin'
+SITE_SUPERUSER_EMAIL = 'myadmin@example.com'
+SITE_SUPERUSER_PASSWORD  = 'adminpass'
+SITE_ID = 1
