@@ -28,11 +28,16 @@ Following steps assume that you have installed
 
 ##### ~ Project isn't ready for production environment yet
 
-#### Using the application
+#### Using the api
 1. A default superuser were created using [Django Finalware](https://github.com/un33k/django-finalware)
 ~ for development mode only
 2. Go to http://127.0.0.1:8000/api/items , there is no records in the database yet 
 3. Check API documentation [here](https://app.swaggerhub.com/apis/islambayoumy/pos_system/1.0.0)
+
+##### There are three Models
+1. Items: for separated items at the store
+2. Receipt: for standalone receipts
+3. Receipts_Items: items added to a specific receipt
 
 ## Implementation
  - python3 & django for back-end restful api
