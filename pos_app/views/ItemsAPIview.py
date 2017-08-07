@@ -1,16 +1,36 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from pos_app.models import Items
+from pos_app.models import Items, Receipts_Items
 from pos_app.serializers import ItemsSerializer
+import json
 
 class ItemsList(APIView):
 
     def get(self, request):
         if request.user.is_authenticated():
+            retrieve = request.GET.get('retrieve', '')
             items = Items.objects.all()
-            serializer = ItemsSerializer(items, many=True)
-            return Response(serializer.data)
+            if retrieve == 'msi':
+                max, msi = 0, 0
+                for item in items:
+                    sum = 0
+                    for i in Receipts_Items.objects.filter(item=item):
+                        print(str(i.total_item_amount))
+                        sum += i.total_item_amount
+                        if sum > max:
+                            max = sum
+                            msi = i.item
+                        else:
+                            pass
+                res_data = {}
+                res_data['item'] = msi.name
+                res_data['sold times'] = max
+                return Response(str(res_data))
+
+            elif retrieve == 'items':
+                serializer = ItemsSerializer(items, many=True)
+                return Response(serializer.data)
         else:
             return Response('authentication needed !')
 
