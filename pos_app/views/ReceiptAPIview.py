@@ -37,7 +37,6 @@ class ReceiptList(APIView):
             else:
                 try:
                     if float(paid_amount) == receipt_obj.paid_amount:
-                        print(receipt_obj)
                         Receipt.objects.filter(pk=id).update(is_paid=True)
                         return Response('receipt paid successfully', status=status.HTTP_201_CREATED)
                     else:
