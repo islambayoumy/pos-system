@@ -30,14 +30,18 @@ class ReceiptList(APIView):
         if request.user.is_authenticated():
             id = request.POST.get('receipt_id', '')
             paid_amount = request.POST.get('paid_amount', '')
-            receipt_obj = Receipt.objects.filter(pk=id)
+            receipt_obj = Receipt.objects.get(pk=id)
 
             if not receipt_obj:
                 return Response('no such receipt')
             else:
                 try:
-                    receipt_obj.update(paid_amount=paid_amount)
-                    return Response('updated successfully', status=status.HTTP_201_CREATED)
+                    if float(paid_amount) == receipt_obj.paid_amount:
+                        print(receipt_obj)
+                        Receipt.objects.filter(pk=id).update(is_paid=True)
+                        return Response('receipt paid successfully', status=status.HTTP_201_CREATED)
+                    else:
+                        return Response('Payment amount needs to be the same as receipt total amount')
                 except:
                     return Response('error')
         else:
